@@ -5,7 +5,16 @@
 
 proc snack::createIcons {} {
   set libdir [file dirname [info library]]
-  set snackdir $libdir/snack$snack::version
+  if {[file isdirectory $libdir/snack$snack::version]} {
+    set snackdir $libdir/snack$snack::version
+  } else {
+    set snackdir [glob $libdir/snack*]
+    if {[llength $snackdir] == 0} {
+      error "Cannot find the snack directory"
+    } elseif {[llength $snackdir] > 1} {
+      set snackdir [lindex $snackdir 0]
+    }
+  }
   set icondir $snackdir/icons
   set iconfiles {
 	{sozai_cman_jp_20180502175701.gif snackPlay} 
